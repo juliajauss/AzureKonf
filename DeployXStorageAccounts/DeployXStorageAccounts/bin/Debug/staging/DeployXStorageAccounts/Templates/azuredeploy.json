@@ -1,0 +1,40 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "JuleAdmin"
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "defaultValue": "Test!1"
+    },
+    "instanceCount": {
+      "type": "int",
+      "defaultValue": 5
+    }
+  }, 
+  "variables": {
+    "apiVersions": {
+      "storageAccounts": "2015-06-15"
+    },
+    "prefix": "nicostoragecvonf"
+  },
+    "resources": [
+      {
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "[variables('apiVersions').storageAccounts]",
+        "location": "[resourceGroup().location]",
+        "name": "[concat(variables('prefix'), copyIndex())]",
+        "copy": {
+          "name": "test",
+          "count": "[parameters('instanceCount')]"
+        },
+        "properties": {
+          "accountType": "Standard_LRS"
+        }
+      }
+    ]
+  }
+
